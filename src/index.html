@@ -2,14 +2,22 @@
 <html>
 
 <head>
-	<title>Ejemplo básico</title>
+	<title>todois</title>
 	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-	<h1>La aplicación esta corriendo!</h1>
+	
+	<div class="contenedortarea">
+		<input  class="tituloDescripcion" id="tituloTarea" type="text" placeholder="TITULO DE TAREA">
+		<input class="tareaDescripcion" id="tarea" type="text" placeholder="DESCRIPCION" >
+		<button class="tareas" onclick=crearTarea()> <img src="img/icons8-añadir-24.png" alt=""> AÑADIR TAREA</button>
+		<button id="eliminar" class="tareas" onclick= eliminarUltimaTarea()>eliminar</button>
+		
+		</div>
 
-	<script src="./index.js" type="module"></script>
+	<script src="index.js"></script>
 </body>
 
 </html>
