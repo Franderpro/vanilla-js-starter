@@ -33,7 +33,7 @@ async function guardarTareas(nuevaTarea) {
         if (response.ok) {
             const data = await response.json();
             return data[data.length-1].id
-            
+
         } else {
             console.error("Error al guardar la tarea:", response.statusText);
         }
@@ -44,17 +44,23 @@ async function guardarTareas(nuevaTarea) {
  async function crearTarea() {
     const tareaInput = document.getElementById("tarea");
     const tarea = tareaInput.value.trim();
+    
     const tituloTarea = document.getElementById("tituloTarea");
     const titulo = tituloTarea.value.trim();
     if (tarea !== "") {
+        const onDelete=(id, child) => { 
+
+            return () => { 
+                child.parentNode.removeChild(child);
+               
+                eliminar(id);
+             }
+         }
         const texto = document.createElement("p");
         texto.innerText = titulo + ": " + tarea;
         const botonEliminar = document.createElement("button");
         botonEliminar.innerText = "Eliminar";
-        botonEliminar.onclick = function () {
-            texto.parentNode.removeChild(texto);
-            eliminar(tarea.id)
-        };
+       
         texto.appendChild(botonEliminar);
         document.body.appendChild(texto);
         let id= await guardarTareas({
@@ -62,6 +68,7 @@ async function guardarTareas(nuevaTarea) {
             description: tarea
 
         });
+        botonEliminar.onclick = onDelete(id, texto);
         console.log(id);
         tareaInput.value = "";
     }
@@ -69,12 +76,11 @@ async function guardarTareas(nuevaTarea) {
 
 
 async function eliminar(id) { 
-    try {
+    try { 
         const response = await fetch("http://localhost:3000/api/task/"+id , {
             method: "DELETE",
         });
         if (response.ok) {
-            
             const data = await response.json();
         } else {
             console.error("Error al eliminar la tarea:", response.statusText);
