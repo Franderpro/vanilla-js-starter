@@ -1,17 +1,29 @@
 
 // Inserte el código aquí
-document.querySelector('.añadir').addEventListener('click', function () {
-    crearTarea();
-});
+
+let add = document.getElementById('crearTarea')
+
+
+add.addEventListener("click",function () {
+  
+    crearTarea()
+    extraerTarea()
+    eliminar()
+  
+})
+
+
+
 async function extraerTarea() {
-    try { const response= await fetch("http://localhost:3000/api/task/");
-    const data= await response.json();
+    try {
+        const response = await fetch("http://localhost:3000/api/task/");
+        const data = await response.json();
         
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
     }
-    
 }
+
 function crearTarea() {
     const tareaInput = document.getElementById("tarea");
     const tarea = tareaInput.value.trim();
@@ -24,37 +36,40 @@ function crearTarea() {
         botonEliminar.innerText = "Eliminar";
         botonEliminar.onclick = function () {
             texto.parentNode.removeChild(texto);
+            eliminarUltimaTarea()
+            eliminar()
         };
         texto.appendChild(botonEliminar);
         document.body.appendChild(texto);
-        console.log(document.body.appendChild(texto))
         guardarTareas({
-            title: titulo,
+            titulo: titulo, 
             description: tarea
         });
         tareaInput.value = "";
     }
 }
+
 document.getElementById("eliminar").addEventListener("click", function () {
     eliminarUltimaTarea();
-    eliminar({
-        id
-    })
 });
+
 function eliminarUltimaTarea() {
     const elementos = document.querySelectorAll("p");
     const ultimoElemento = elementos[elementos.length - 1];
     if (ultimoElemento) {
-        const id = ultimoElemento.dataset.id;
-        eliminar(id);
+       
         ultimoElemento.parentNode.removeChild(ultimoElemento);
-        eliminar(id )
+        extraerTarea()
+        eliminar(id);
     }
-    eliminar({
-        title: titulo,
-        description: tarea
-    })
+    fetch('http://localhost:3000/api/task/')
+            .then(response => response.json())
+            .then(id=> console.log(id));
+            eliminar();
+            eliminarUltimaTarea
+    
 }
+
 async function guardarTareas(nuevaTarea) {
     try {
         const response = await fetch("http://localhost:3000/api/task/", {
@@ -73,17 +88,17 @@ async function guardarTareas(nuevaTarea) {
         console.error("Error al realizar la solicitud:", error);
     }
 }
-async function eliminar() {
+
+async function eliminar(id) { 
     try {
-        const response = await fetch("http://localhost:3000/api/task/"+id, {
+        const response = await fetch("http://localhost:3000/api/task/"+id , {
             method: "DELETE",
-            
         });
         if (response.ok) {
+            
             const data = await response.json();
-
         } else {
-            console.error("Error al guardar la tarea:", response.statusText);
+            console.error("Error al eliminar la tarea:", response.statusText);
         }
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
