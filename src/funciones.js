@@ -48,7 +48,7 @@ async function guardarTareas(nuevaTarea) {
     const tituloTarea = document.getElementById("tituloTarea");
     const titulo = tituloTarea.value.trim();
     if (tarea !== "") {
-        const onDelete=(id, child) => { 
+        const clickEliminar=(id, child) => { 
 
             return () => { 
                 child.parentNode.removeChild(child);
@@ -68,7 +68,7 @@ async function guardarTareas(nuevaTarea) {
             description: tarea
 
         });
-        botonEliminar.onclick = onDelete(id, texto);
+        botonEliminar.onclick = clickEliminar(id, texto);
         console.log(id);
         tareaInput.value = "";
     }
