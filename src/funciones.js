@@ -1,91 +1,93 @@
-
-// Inserte el código aquí
+import { extraerTarea, eliminar, guardarTareas } from "./index.js";
 
 let add = document.getElementById('crearTarea')
 
 
-add.addEventListener("click",function () {
-  
+add.addEventListener("click", function () {
+
     crearTarea()
-    
+
 })
 
 
-
-async function extraerTarea() {
-    try {
-        const response = await fetch("http://localhost:3000/api/task/");
-        const data = await response.json();
-        
-    } catch (error) {
-        console.error("Error al realizar la solicitud:", error);
-    }
-}
-async function guardarTareas(nuevaTarea) {
-    try {
-        const response = await fetch("http://localhost:3000/api/task/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(nuevaTarea)
-        });
-        if (response.ok) {
-            const data = await response.json();
-            return data[data.length-1].id
-
-        } else {
-            console.error("Error al guardar la tarea:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Error al realizar la solicitud:", error);
-    }
-}
- async function crearTarea() {
+async function crearTarea() {
     const tareaInput = document.getElementById("tarea");
     const tarea = tareaInput.value.trim();
-    
+
     const tituloTarea = document.getElementById("tituloTarea");
     const titulo = tituloTarea.value.trim();
     if (tarea !== "") {
-        const clickEliminar=(id, child) => { 
 
-            return () => { 
+        const clickEliminar = (id, child) => {
+            return () => {
                 child.parentNode.removeChild(child);
-               
                 eliminar(id);
-             }
-         }
+            }
+        }
+
         const texto = document.createElement("p");
         texto.innerText = titulo + ": " + tarea;
         const botonEliminar = document.createElement("button");
         botonEliminar.innerText = "Eliminar";
-       
+        const check = document.createElement("input");
+        check.id = "check";
+        check.type = "checkbox";
+        check.onclick =contadorTareas();
+        texto.appendChild(check);
         texto.appendChild(botonEliminar);
         document.body.appendChild(texto);
-        let id= await guardarTareas({
-            titulo: titulo, 
+        let id = await guardarTareas({
+            titulo: titulo,
             description: tarea
-
         });
         botonEliminar.onclick = clickEliminar(id, texto);
-        console.log(id);
+       
         tareaInput.value = "";
+       
+
     }
 }
+async function mostrarTarea() {
+    try {
+        const clickEliminar = (id, child) => {
+            return () => {
 
-
-async function eliminar(id) { 
-    try { 
-        const response = await fetch("http://localhost:3000/api/task/"+id , {
-            method: "DELETE",
-        });
-        if (response.ok) {
-            const data = await response.json();
-        } else {
-            console.error("Error al eliminar la tarea:", response.statusText);
+                eliminar(id);
+            }
         }
+
+        const tareas = await extraerTarea();
+
+        tareas.forEach(t => {
+            const texto = document.createElement("p");
+            const botonEliminar = document.createElement("button");
+            botonEliminar.innerText = "Eliminar";
+            const check = document.createElement("input");
+            check.id = "check";
+            check.type = "checkbox";
+            check.onclick =contadorTareas;
+            texto.innerText = t.titulo + ": " + t.description;
+            texto.appendChild(check);
+
+            texto.appendChild(botonEliminar);
+            document.body.appendChild(texto);
+            botonEliminar.onclick = clickEliminar(t.id, t.titulo, t.description);
+
+        });
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
     }
+
+
+
 }
+window.addEventListener("load", () => {
+    mostrarTarea();
+})
+function contadorTareas() {
+    let completadas = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    
+    
+    console.log(completadas);
+}
+    
