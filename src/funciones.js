@@ -1,8 +1,8 @@
 import { extraerTarea, eliminar, guardarTareas } from "./index.js";
 
 let add = document.getElementById('crearTarea')
-
-
+let contador=0
+let valor = document.getElementById("valor")
 add.addEventListener("click", function () {
 
     crearTarea()
@@ -32,7 +32,7 @@ async function crearTarea() {
         const check = document.createElement("input");
         check.id = "check";
         check.type = "checkbox";
-        check.onclick =contadorTareas();
+       // check.onclick =contadorTareas();
         texto.appendChild(check);
         texto.appendChild(botonEliminar);
         document.body.appendChild(texto);
@@ -43,6 +43,18 @@ async function crearTarea() {
         botonEliminar.onclick = clickEliminar(id, texto);
        
         tareaInput.value = "";
+
+        console.log(check)
+
+        check.addEventListener("click",function () {
+            if (check.checked) {
+                contador++
+                valor.innerHTML=contador
+            }else{
+                contador--
+                valor.innerHTML=contador
+            }
+        })
        
 
     }
@@ -64,14 +76,25 @@ async function mostrarTarea() {
             botonEliminar.innerText = "Eliminar";
             const check = document.createElement("input");
             check.id = "check";
-            check.type = "checkbox";
-            check.onclick =contadorTareas;
+            check.type = "checkbox"
+            check.addEventListener("click",function () {
+                if (check.checked) {
+                    contador++
+                    valor.innerHTML=contador
+                }else{
+                    contador--
+                    valor.innerHTML=contador
+                }
+            })
             texto.innerText = t.titulo + ": " + t.description;
             texto.appendChild(check);
 
             texto.appendChild(botonEliminar);
             document.body.appendChild(texto);
             botonEliminar.onclick = clickEliminar(t.id, t.titulo, t.description);
+
+
+          
 
         });
     } catch (error) {
@@ -84,10 +107,6 @@ async function mostrarTarea() {
 window.addEventListener("load", () => {
     mostrarTarea();
 })
-function contadorTareas() {
-    let completadas = document.querySelectorAll('input[type="checkbox"]:checked').length;
-    
-    
-    console.log(completadas);
-}
-    
+
+
+
