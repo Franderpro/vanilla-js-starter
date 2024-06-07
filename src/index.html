@@ -10,7 +10,7 @@
 <body>
 	
 
-	<h5 style="color: white;" id="valor">0</h5>
+	<h5 style="color: white;" id="contador">0</h5>
 
 
 	<div class="contenedortarea">
@@ -18,7 +18,9 @@
 		<input onkeyup=clickEnter() class="tareaDescripcion" id="tarea" type="text" placeholder="DESCRIPCION" >
 		<button class="tareas" id="crearTarea"> <img src="img/icons8-añadir-24.png" alt=""> AÑADIR TAREA</button>
 		<button id="eliminar" class="tareas" onclick= eliminarUltimaTarea()>eliminar</button>
-		</div>
+	</div>
+
+	<div id="lista"></div>
 
 	<script type="module" src="funciones.js"></script>
 

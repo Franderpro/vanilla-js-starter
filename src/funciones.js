@@ -1,21 +1,23 @@
-import { extraerTarea, eliminar, guardarTareas,putTask } from "./index.js";
+import { extraerTarea, eliminar, guardarTareas, putTask } from "./index.js";
 
-let add = document.getElementById('crearTarea')
-let contador=0
-let valor = document.getElementById("valor")
+let lista = document.getElementById('lista');
+let add = document.getElementById('crearTarea');
+let contador = document.getElementById("contador");
 add.addEventListener("click", function () {
 
     crearTarea()
 
 })
-
-const tituloTarea = document.getElementById("tituloTarea");
-input.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById("myBtn").click();
-    }
-});
+//         const tareaInput = document.getElementById("tarea");
+//         const tituloTarea = document.getElementById("tituloTarea");
+// input.addEventListener("keypress", async (event) => {
+    
+//     if (event.key === "Enter") {
+        
+//         document.getElementById("crearTarea").click();
+//         crearTarea();
+//     }
+// });
 
 async function crearTarea() {
     const tareaInput = document.getElementById("tarea");
@@ -24,99 +26,74 @@ async function crearTarea() {
     const tituloTarea = document.getElementById("tituloTarea");
     const titulo = tituloTarea.value.trim();
     if (tarea !== "") {
-
-        const clickEliminar = (id, child) => {
-            return () => {
-                child.parentNode.removeChild(child);
-                eliminar(id);
-            }
-        }
-
-        const texto = document.createElement("p");
-        texto.innerText = titulo + ": " + tarea;
-        const botonEliminar = document.createElement("button");
-        botonEliminar.innerText = "Eliminar";
-        const check = document.createElement("input");
-        check.id = "check";
-        check.type = "checkbox";
-        texto.appendChild(check);
-        texto.appendChild(botonEliminar);
-        document.body.appendChild(texto);
         let id = await guardarTareas({
             task: titulo,
-            description: tarea
+            description: tarea,
+            check: "incompleto"
         });
-        botonEliminar.onclick = clickEliminar(id, texto);
-       
+        mostrarTarea();
         tareaInput.value = "";
-
-        console.log(check)
-        let indentificador=check.id
-
-        //crear evento para identificar el check por medio de  id y mandar actualizar
-        function actualizarContador() {
-            if (check.checked) {
-                contador++;
-            } else {
-                contador--;
-                putTask(identificador,"incompleto")
-            }
-            valor.innerHTML = contador;
-        }
-        
-        // Añade el manejador de eventos al checkbox
-        check.addEventListener("click", actualizarContador);
-        
-       
-
     }
 }
+// funcion que mostrara la informacion al usuario 
 async function mostrarTarea() {
     try {
-        const clickEliminar = (id, child) => {
-            return () => {
-
-                eliminar(id);
+        // llamamos al GET del APPI
+        const tareas = await extraerTarea();
+        lista.innerHTML = ""; //funciona como un refrescar pero solo para este div
+        //funcion que elimina mediante el ID
+        const clickEliminar = (id) => {
+            return async () => {
+                await eliminar(id);
+                mostrarTarea();
             }
         }
-
-        const tareas = await extraerTarea();
-
+        // recorre todo el API
         tareas.forEach(t => {
+            //crea documento "p"
             const texto = document.createElement("p");
             const botonEliminar = document.createElement("button");
             botonEliminar.innerText = "Eliminar";
             const check = document.createElement("input");
             check.id = t.id;
             check.type = "checkbox"
-            let identificador= check.id;
-            check.addEventListener("click",async () =>{
-                if (check.checked) {
-                    contador++
-                    valor.innerHTML=contador
-                    putTask(identificador,"completo")
-                }else{
-                    contador--
-                    valor.innerHTML=contador
-                    putTask(identificador,"incompleto")
-                }
+           // if que pregunta si t.check está completo o incompleto, si está completo, hacemos un check.checked = true
+            if (t.check == "completo") {
+               check.checked = true
+
+           }
+            check.addEventListener("click", async () => {
+                await putTask(t);
+                //llamar contadorTareas()
+                contadorTareas()
             })
-            texto.innerText = t.titulo + ": " + t.description;
+            texto.innerText = t.task + ": " + t.description;
             texto.appendChild(check);
 
             texto.appendChild(botonEliminar);
-            document.body.appendChild(texto);
-            botonEliminar.onclick = clickEliminar(t.id, t.titulo, t.description);
-
+            lista.appendChild(texto);
+            botonEliminar.onclick = clickEliminar(t.id, t.task, t.description);
         });
+        //llamar contadorTareas()
+        contadorTareas()
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
     }
-
-
-
 }
-window.addEventListener("load", () => {
+
+//vamos a crear una funcion contadorTareas() que lo que llame a extrareTareas, vamos a recorrer tareas, y dentro del for, vamos a hacer un if que pregunte si tarea.check está completo, si está completo vamos a aumentar un contador, y al final del for, vas a cambiar el contador
+ async function contadorTareas() {
+    const tareas = await extraerTarea();
+    tareas.forEach(t => {
+        if (t.check == "completo") {
+            contador++;
+            valor.innerHTML=contador
+
+        }
+    });
+    
+ }
+window.addEventListener("load", async () => {
     mostrarTarea();
 })
 
