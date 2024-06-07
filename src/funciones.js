@@ -2,23 +2,12 @@ import { extraerTarea, eliminar, guardarTareas, putTask } from "./index.js";
 
 let lista = document.getElementById('lista');
 let add = document.getElementById('crearTarea');
-let contador = document.getElementById("contador");
+let valor= document.getElementById("valor");
 add.addEventListener("click", function () {
 
     crearTarea()
 
 })
-//         const tareaInput = document.getElementById("tarea");
-//         const tituloTarea = document.getElementById("tituloTarea");
-// input.addEventListener("keypress", async (event) => {
-    
-//     if (event.key === "Enter") {
-        
-//         document.getElementById("crearTarea").click();
-//         crearTarea();
-//     }
-// });
-
 async function crearTarea() {
     const tareaInput = document.getElementById("tarea");
     const tarea = tareaInput.value.trim();
@@ -62,40 +51,52 @@ async function mostrarTarea() {
                check.checked = true
 
            }
-            check.addEventListener("click", async () => {
+            check.addEventListener("click", async function () {
                 await putTask(t);
                 //llamar contadorTareas()
-                contadorTareas()
+               await contadorTareas()
+                console.log("hola");
             })
             texto.innerText = t.task + ": " + t.description;
             texto.appendChild(check);
-
             texto.appendChild(botonEliminar);
             lista.appendChild(texto);
-            botonEliminar.onclick = clickEliminar(t.id, t.task, t.description);
+            botonEliminar.onclick = clickEliminar(t.id, t.task, t.description);       
         });
         //llamar contadorTareas()
-        contadorTareas()
+        await contadorTareas()
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
     }
 }
-
 //vamos a crear una funcion contadorTareas() que lo que llame a extrareTareas, vamos a recorrer tareas, y dentro del for, vamos a hacer un if que pregunte si tarea.check está completo, si está completo vamos a aumentar un contador, y al final del for, vas a cambiar el contador
  async function contadorTareas() {
     const tareas = await extraerTarea();
+    let contador= 0
     tareas.forEach(t => {
         if (t.check == "completo") {
             contador++;
-            valor.innerHTML=contador
-
+            valor.innerHTML = contador
         }
+        console.log("hola");
     });
-    
- }
+     
+}
 window.addEventListener("load", async () => {
     mostrarTarea();
+    
+    
 })
+const tareaInput = document.getElementById("tarea");
+const tituloTarea = document.getElementById("tituloTarea");
 
+const handleEnterKeyPress = async (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("crearTarea").click();
+    }
+};
+tareaInput.addEventListener("keypress", handleEnterKeyPress);
+tituloTarea.addEventListener("keypress", handleEnterKeyPress);
 
 
