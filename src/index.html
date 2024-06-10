@@ -2,14 +2,32 @@
 <html>
 
 <head>
-	<title>Ejemplo básico</title>
+	<title>todois</title>
 	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-	<h1>La aplicación esta corriendo!</h1>
+<div>
+	<h1>Tareas terminadas</h1>
+	<h1 class="incompletas">Tareas incompletas</h1>
 
-	<script src="./index.js" type="module"></script>
+	<h5 class="contador" id="valor">0</h5>
+	<h5 class="contador2" id="valor2">0</h5>
+
+
+	<div class="contenedortarea">
+		<input onkeyup=clickEnter() class="tituloDescripcion" id="tituloTarea" type="text" placeholder="TITULO DE TAREA">
+		<input onkeyup=clickEnter() class="tareaDescripcion" id="tarea" type="text" placeholder="DESCRIPCION" >
+		<button class="tareas" id="crearTarea"> <img src="img/icons8-añadir-24.png" alt=""> AÑADIR TAREA</button>
+		<button id="eliminar" class="tareas" onclick= eliminarUltimaTarea()>eliminar</button>
+	</div>
+</div>	
+	<div class="lista" id="lista" ></div>
+
+	<script type="module" src="funciones.js"></script>
+
+
 </body>
 
 </html>
