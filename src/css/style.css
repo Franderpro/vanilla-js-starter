@@ -51,5 +51,51 @@ p{
     border: 2px solid rgba(128, 128, 128,40%);
     height: 30rem;
     margin-top: 3rem;
+   overflow-y: scroll;
+    
+}
+.contador{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 60%;
+    position: absolute;
+    margin-top: 16rem;
+    border: 2px solid rgba(128, 128, 128,40%);
+    border-radius: 32rem;
+    width: 6rem;
+
+}
+h1{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 54%;
+    position: absolute;
+    margin-top: 12rem;
+}
+.incompletas{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 54%;
+    position: absolute;
+    margin-top: 6.5rem;
+   
+}
+.contador2{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 60%;
+    position: absolute;
+    margin-top: 10rem;
+    border: 2px solid rgba(128, 128, 128,40%);
+    border-radius: 32rem;
+    width: 6rem;
     
 }

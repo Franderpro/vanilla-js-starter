@@ -8,9 +8,12 @@
 </head>
 
 <body>
-	
+<div>
+	<h1>Tareas terminadas</h1>
+	<h1 class="incompletas">Tareas incompletas</h1>
 
-	<h5 style="color: white;" id="valor">0</h5>
+	<h5 class="contador" id="valor">0</h5>
+	<h5 class="contador2" id="valor2">0</h5>
 
 
 	<div class="contenedortarea">
@@ -19,8 +22,8 @@
 		<button class="tareas" id="crearTarea"> <img src="img/icons8-añadir-24.png" alt=""> AÑADIR TAREA</button>
 		<button id="eliminar" class="tareas" onclick= eliminarUltimaTarea()>eliminar</button>
 	</div>
-
-	<div class="lista" id="lista" aria-placeholder="hola"></div>
+</div>	
+	<div class="lista" id="lista" ></div>
 
 	<script type="module" src="funciones.js"></script>
 
